@@ -1,0 +1,25 @@
+@app.route('/edit/<id>', methods=['GET', 'POST'])
+
+def edit(id):
+
+product = collection.find_one({"_id": ObjectId(id)})
+
+if request.method == 'POST':
+
+collection.update_one(
+{"_id": ObjectId(id)},
+{"$set": {
+"name": request.form['name'],
+"price": float(request.form['price']),
+"stock": int(request.form['stock'])
+}}
+)
+return redirect(url_for('index'))
+return render_template('edit.html', product=product)
+# DELETE PRODUCT
+@app.route('/delete/<id>')
+def delete(id):
+collection.delete_one({"_id": ObjectId(id)})
+return redirect(url_for('index'))
+if __name__ == '__main__':
+app.run(debug=True)
